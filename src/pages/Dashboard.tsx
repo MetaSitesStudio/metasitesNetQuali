@@ -25,6 +25,9 @@ import { runSpeedTest, stopSpeedTest } from '../engine/speedTest';
 import { formatSpeed, formatPing, gradeColor, pingColor } from '../engine/utils';
 import { getScoreTier, getPlanUtilization, getRecommendations } from '../engine/qualityScore';
 import { shareResult } from '../engine/exportShare';
+import { LiveSpeedGraph } from '../components/LiveSpeedGraph';
+import { getMaxVideoQuality, getEstimatedLoadTime, getBufferingEstimate } from '../engine/videoQuality';
+import { Tv } from 'lucide-react';
 
 export function Dashboard() {
   const { t } = useTranslation();
@@ -187,7 +190,7 @@ export function Dashboard() {
             </motion.div>
 
             {/* CTA */}
-            <div className="mt-5 relative" style={{ zIndex: 20 }}>
+            <div style={{ marginTop: 32, marginBottom: 32, position: 'relative', zIndex: 20 }}>
               <AnimatePresence mode="wait">
                 {isComplete ? (
                   <motion.div
@@ -271,7 +274,7 @@ export function Dashboard() {
             <AnimatePresence>
               {isComplete && latestResult && (
                 <motion.div
-                  className="w-full mt-5"
+                  className="w-full"
                   style={{ maxWidth: 380 }}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -416,12 +419,78 @@ export function Dashboard() {
               )}
             </div>
 
+            {/* Live Speed Graph */}
+            <div style={{ marginTop: 16 }}>
+              <LiveSpeedGraph />
+            </div>
+
+            {/* Video Quality Estimation */}
+            <AnimatePresence>
+              {isComplete && latestResult && (
+                <motion.div
+                  className="panel"
+                  style={{ padding: '16px 18px', marginTop: 16 }}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  {(() => {
+                    const vq = getMaxVideoQuality(latestResult.download);
+                    const loadTime = getEstimatedLoadTime(latestResult.download);
+                    const buffering = getBufferingEstimate(latestResult.download);
+                    return (
+                      <>
+                        <div className="section-label" style={{ marginBottom: 10 }}>
+                          <Tv size={12} />
+                          Max Streaming Quality
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
+                          <span style={{ fontSize: 32, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.02em' }}>
+                            {vq.resolution}
+                          </span>
+                          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-tertiary)' }}>
+                            {vq.label}
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
+                          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)' }}>
+                            ⏱ Load Time {Math.round(loadTime)}ms
+                          </span>
+                          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-tertiary)' }}>
+                            📊 Buffering {buffering}%
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                          {vq.devices.map((d, i) => (
+                            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                              <div style={{
+                                width: 44, height: 44, borderRadius: 'var(--radius-sm)',
+                                border: '1.5px solid var(--accent)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: 20,
+                              }}>
+                                {d.icon}
+                              </div>
+                              <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--text-tertiary)', textAlign: 'center', maxWidth: 60 }}>
+                                {d.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Recommendations */}
             <AnimatePresence>
               {isComplete && recommendations.length > 0 && (
                 <motion.div
-                  className="panel mt-3"
-                  style={{ padding: '14px 16px' }}
+                  className="panel"
+                  style={{ padding: '14px 16px', marginTop: 16 }}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}

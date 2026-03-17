@@ -77,6 +77,7 @@ async function measureDownload(
     peakMbps = Math.max(peakMbps, currentMbps);
     const progress = Math.min(((performance.now() - startTime) / TEST_DURATION) * 100, 100);
     onProgress(currentMbps, progress);
+    useStore.getState().addSpeedGraphPoint(currentMbps, 'download');
   }, 250);
 
   await Promise.allSettled(workers);
@@ -139,6 +140,7 @@ async function measureUpload(
     const currentMbps = (totalBytes * 8) / (elapsed * 1_000_000);
     const progress = Math.min(((performance.now() - startTime) / TEST_DURATION) * 100, 100);
     onProgress(currentMbps, progress);
+    useStore.getState().addSpeedGraphPoint(currentMbps, 'upload');
   }, 250);
 
   await Promise.allSettled(workers);
@@ -264,6 +266,7 @@ export async function runSpeedTest(): Promise<TestResult | null> {
     // Phase 1: Ping
     store.setPhase('ping');
     store.setProgress(0);
+    store.clearSpeedGraph();
 
     const { ping, jitter, packetLoss } = await measurePing(signal);
     store.setCurrentPing(ping);

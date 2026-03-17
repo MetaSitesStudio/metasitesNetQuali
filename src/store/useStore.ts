@@ -17,6 +17,7 @@ interface AppState {
   currentPacketLoss: number;
   currentBufferbloat: number;
   currentDns: number;
+  speedGraphData: { time: number; speed: number; type: 'download' | 'upload' }[];
   connectionType: string;
   ispName: string;
   latestResult: TestResult | null;
@@ -34,6 +35,8 @@ interface AppState {
   setIspName: (n: string) => void;
   setLatestResult: (r: TestResult) => void;
   resetTest: () => void;
+  addSpeedGraphPoint: (speed: number, type: 'download' | 'upload') => void;
+  clearSpeedGraph: () => void;
 
   // History
   history: TestResult[];
@@ -63,6 +66,7 @@ export const useStore = create<AppState>((set, get) => ({
   currentPacketLoss: 0,
   currentBufferbloat: 0,
   currentDns: 0,
+  speedGraphData: [],
   connectionType: 'unknown',
   ispName: '',
   latestResult: null,
@@ -91,8 +95,16 @@ export const useStore = create<AppState>((set, get) => ({
       currentPacketLoss: 0,
       currentBufferbloat: 0,
       currentDns: 0,
+      speedGraphData: [],
       latestResult: null,
     }),
+
+  addSpeedGraphPoint: (speed, type) => {
+    const data = get().speedGraphData;
+    const time = data.length > 0 ? data[data.length - 1].time + 0.25 : 0;
+    set({ speedGraphData: [...data, { time: Math.round(time * 100) / 100, speed: Math.round(speed * 100) / 100, type }] });
+  },
+  clearSpeedGraph: () => set({ speedGraphData: [] }),
 
   // History
   history: [],

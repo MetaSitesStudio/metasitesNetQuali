@@ -129,8 +129,8 @@ export function Navigation() {
         }}
       >
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-          maxWidth: 420, margin: '0 auto', padding: '6px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 24, padding: '6px 16px',
         }}>
           {tabs.map(({ id, icon: Icon, labelKey }) => {
             const isActive = activeTab === id;
@@ -140,7 +140,7 @@ export function Navigation() {
                 onClick={() => setActiveTab(id)}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  gap: 2, flex: 1, padding: '6px 0',
+                  gap: 2, padding: '6px 12px',
                   background: isActive ? 'var(--accent-soft)' : 'transparent',
                   border: 'none', cursor: 'pointer',
                   borderRadius: 'var(--radius-md)',
