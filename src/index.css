@@ -1,0 +1,320 @@
+@import "tailwindcss";
+
+/* ===================================================================
+   METASITES NETQUAL — DESIGN SYSTEM
+   Premium dark diagnostics UI. One source of truth for every surface.
+   =================================================================== */
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  /* Surfaces */
+  --bg-base: #f8fafc;
+  --bg-surface: #f1f5f9;
+  --bg-panel: #ffffff;
+  --bg-panel-hover: #f8fafc;
+  --bg-inset: #e8ecf1;
+  --bg-nav: rgba(255,255,255,0.88);
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+
+  /* Borders */
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --border-active: #cbd5e1;
+
+  /* Accents */
+  --accent: #06b6d4;
+  --accent-soft: rgba(6, 182, 212, 0.08);
+  --accent-purple: #8b5cf6;
+  --accent-blue: #3b82f6;
+  --accent-teal: #14b8a6;
+  --accent-orange: #f97316;
+  --accent-red: #ef4444;
+  --accent-green: #22c55e;
+  --accent-lime: #84cc16;
+
+  /* Gauge */
+  --gauge-track: #e2e8f0;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Radii */
+  --radius-xl: 16px;
+  --radius-lg: 12px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+
+  /* Spacing (reference) */
+  /* 4 8 12 16 20 24 32 40 48 56 64 */
+}
+
+.dark {
+  --bg-base: #06090f;
+  --bg-surface: #0c1120;
+  --bg-panel: rgba(13, 19, 36, 0.72);
+  --bg-panel-hover: rgba(18, 26, 48, 0.82);
+  --bg-inset: rgba(20, 28, 52, 0.5);
+  --bg-nav: rgba(8, 12, 24, 0.92);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #4b5972;
+
+  --border: rgba(51, 65, 85, 0.3);
+  --border-subtle: rgba(51, 65, 85, 0.15);
+  --border-active: rgba(6, 182, 212, 0.2);
+
+  --gauge-track: rgba(30, 41, 59, 0.5);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* ===== BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overscroll-behavior: none;
+  transition: background 0.3s ease, color 0.25s ease;
+}
+
+.dark body {
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 10%, rgba(6, 182, 212, 0.035) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 50% at 85% 80%, rgba(139, 92, 246, 0.025) 0%, transparent 50%),
+    var(--bg-base);
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* ===== PANEL — One card to rule them all ===== */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.panel--hover:hover,
+.panel--interactive:hover {
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== NAV SURFACES ===== */
+.nav-surface {
+  background: var(--bg-nav);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== LAYOUT ===== */
+.app-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+@media (min-width: 640px)  { .app-container { padding-left: 32px; padding-right: 32px; } }
+@media (min-width: 1024px) { .app-container { padding-left: 40px; padding-right: 40px; } }
+@media (min-width: 1440px) { .app-container { padding-left: 56px; padding-right: 56px; } }
+
+/* Page body — consistent padding below nav */
+.page-body {
+  padding-top: 24px;
+  padding-bottom: 100px; /* mobile nav space */
+}
+@media (min-width: 1024px) {
+  .page-body {
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+}
+
+/* Dashboard special — centers vertically on desktop */
+.dashboard-body {
+  padding-top: 16px;
+  padding-bottom: 100px;
+}
+@media (min-width: 1024px) {
+  .dashboard-body {
+    min-height: calc(100dvh - 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== SEGMENTED CONTROL ===== */
+.segmented {
+  display: inline-flex;
+  background: var(--bg-inset);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+}
+.segmented-btn {
+  padding: 6px 14px;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+.segmented-btn:hover {
+  color: var(--text-secondary);
+}
+.segmented-btn--active {
+  background: var(--accent);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===== INPUT ===== */
+.input {
+  font-family: var(--font-sans);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* ===== SECTION LABEL ===== */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== GAUGE ===== */
+.gauge-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark .gauge-glow {
+  filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.2));
+}
+
+/* ===== TOUCH TARGET ===== */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== NAV VISIBILITY ===== */
+@media (min-width: 1024px) {
+  .mobile-nav { display: none !important; }
+  .desktop-nav { display: flex !important; }
+}
+@media (max-width: 1023px) {
+  .desktop-nav { display: none !important; }
+  .mobile-nav { display: flex !important; }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-panel) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ===== AMBIENT ORB (dashboard only, very subtle) ===== */
+.ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(100px);
+  opacity: 0;
+  z-index: 0;
+}
+.dark .ambient-orb { opacity: 1; }
+.ambient-orb--cyan {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.04) 0%, transparent 70%);
+  top: -150px; left: -100px;
+}
+.ambient-orb--purple {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
+  bottom: -100px; right: -80px;
+}

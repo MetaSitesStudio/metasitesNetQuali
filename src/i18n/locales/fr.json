@@ -1,0 +1,52 @@
+{
+  "app": { "name": "NetQual", "tagline": "Diagnostics Internet" },
+  "nav": { "dashboard": "Tableau de bord", "history": "Historique", "settings": "Paramètres" },
+  "dashboard": {
+    "startTest": "Lancer le test", "stopTest": "Arrêter", "testing": "Test en cours...",
+    "ready": "Prêt à tester", "download": "Téléchargement", "upload": "Envoi",
+    "ping": "Ping", "jitter": "Gigue", "packetLoss": "Perte de paquets",
+    "bufferbloat": "Bufferbloat", "connectionType": "Connexion",
+    "mbps": "Mbps", "ms": "ms", "percent": "%", "grade": "Note",
+    "excellent": "Excellent", "good": "Bon", "fair": "Moyen", "poor": "Mauvais",
+    "runAgain": "Relancer", "viewDetails": "Voir les détails", "share": "Partager",
+    "testComplete": "Test terminé",
+    "downloadPhase": "Mesure de la vitesse de téléchargement...",
+    "uploadPhase": "Mesure de la vitesse d'envoi...",
+    "pingPhase": "Mesure de la latence...",
+    "jitterPhase": "Analyse de la gigue...",
+    "packetLossPhase": "Vérification de la perte de paquets...",
+    "bufferbloatPhase": "Détection du bufferbloat...",
+    "idle": "Appuyez pour commencer"
+  },
+  "history": {
+    "title": "Historique des tests", "noResults": "Aucun résultat",
+    "noResultsDesc": "Lancez votre premier test de vitesse",
+    "clearAll": "Tout effacer", "confirmClear": "Effacer tout l'historique ?",
+    "today": "Aujourd'hui", "yesterday": "Hier", "thisWeek": "Cette semaine", "older": "Plus ancien",
+    "trends": "Tendances", "period24h": "24h", "period7d": "7j", "period30d": "30j"
+  },
+  "settings": {
+    "title": "Paramètres", "appearance": "Apparence", "theme": "Thème",
+    "themeSystem": "Système", "themeDark": "Sombre", "themeLight": "Clair",
+    "language": "Langue", "network": "Réseau", "ispSpeed": "Débit du forfait FAI",
+    "ispSpeedDesc": "Entrez le débit de votre forfait pour comparaison",
+    "about": "À propos", "version": "Version", "privacy": "Confidentialité",
+    "privacyDesc": "Tous les tests s'exécutent localement. Aucune donnée ne quitte votre appareil.",
+    "help": "Aide et FAQ"
+  },
+  "help": {
+    "title": "Aide et FAQ",
+    "whatIsDownload": "Qu'est-ce que la vitesse de téléchargement ?",
+    "whatIsDownloadDesc": "La vitesse de téléchargement mesure la rapidité des données depuis Internet vers votre appareil.",
+    "whatIsUpload": "Qu'est-ce que la vitesse d'envoi ?",
+    "whatIsUploadDesc": "La vitesse d'envoi mesure la rapidité des données de votre appareil vers Internet.",
+    "whatIsPing": "Qu'est-ce que le ping/latence ?",
+    "whatIsPingDesc": "Le ping mesure le temps aller-retour des données vers un serveur.",
+    "whatIsJitter": "Qu'est-ce que la gigue ?",
+    "whatIsJitterDesc": "La gigue mesure la variation des temps de ping.",
+    "whatIsPacketLoss": "Qu'est-ce que la perte de paquets ?",
+    "whatIsPacketLossDesc": "La perte de paquets mesure le pourcentage de paquets perdus.",
+    "whatIsBufferbloat": "Qu'est-ce que le bufferbloat ?",
+    "whatIsBufferbloatDesc": "Le bufferbloat est une latence excessive causée par la mise en mémoire tampon des équipements réseau."
+  }
+}

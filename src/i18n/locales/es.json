@@ -1,0 +1,52 @@
+{
+  "app": { "name": "NetQual", "tagline": "Diagnósticos de Internet" },
+  "nav": { "dashboard": "Panel", "history": "Historial", "settings": "Ajustes" },
+  "dashboard": {
+    "startTest": "Iniciar prueba", "stopTest": "Detener", "testing": "Probando...",
+    "ready": "Listo para probar", "download": "Descarga", "upload": "Subida",
+    "ping": "Ping", "jitter": "Jitter", "packetLoss": "Pérdida de paquetes",
+    "bufferbloat": "Bufferbloat", "connectionType": "Conexión",
+    "mbps": "Mbps", "ms": "ms", "percent": "%", "grade": "Grado",
+    "excellent": "Excelente", "good": "Bueno", "fair": "Regular", "poor": "Malo",
+    "runAgain": "Repetir", "viewDetails": "Ver detalles", "share": "Compartir",
+    "testComplete": "Prueba completada",
+    "downloadPhase": "Midiendo velocidad de descarga...",
+    "uploadPhase": "Midiendo velocidad de subida...",
+    "pingPhase": "Midiendo latencia...",
+    "jitterPhase": "Analizando jitter...",
+    "packetLossPhase": "Verificando pérdida de paquetes...",
+    "bufferbloatPhase": "Detectando bufferbloat...",
+    "idle": "Toca para comenzar"
+  },
+  "history": {
+    "title": "Historial de pruebas", "noResults": "Sin resultados",
+    "noResultsDesc": "Ejecuta tu primera prueba de velocidad",
+    "clearAll": "Borrar todo", "confirmClear": "¿Borrar todo el historial?",
+    "today": "Hoy", "yesterday": "Ayer", "thisWeek": "Esta semana", "older": "Anteriores",
+    "trends": "Tendencias", "period24h": "24h", "period7d": "7d", "period30d": "30d"
+  },
+  "settings": {
+    "title": "Ajustes", "appearance": "Apariencia", "theme": "Tema",
+    "themeSystem": "Sistema", "themeDark": "Oscuro", "themeLight": "Claro",
+    "language": "Idioma", "network": "Red", "ispSpeed": "Velocidad del plan ISP",
+    "ispSpeedDesc": "Ingresa la velocidad de tu plan para comparación",
+    "about": "Acerca de", "version": "Versión", "privacy": "Privacidad",
+    "privacyDesc": "Todas las pruebas se ejecutan localmente. Ningún dato sale de tu dispositivo.",
+    "help": "Ayuda y preguntas frecuentes"
+  },
+  "help": {
+    "title": "Ayuda y FAQ",
+    "whatIsDownload": "¿Qué es la velocidad de descarga?",
+    "whatIsDownloadDesc": "La velocidad de descarga mide qué tan rápido viajan los datos desde Internet a tu dispositivo.",
+    "whatIsUpload": "¿Qué es la velocidad de subida?",
+    "whatIsUploadDesc": "La velocidad de subida mide qué tan rápido viajan los datos desde tu dispositivo a Internet.",
+    "whatIsPing": "¿Qué es el ping/latencia?",
+    "whatIsPingDesc": "El ping mide el tiempo de ida y vuelta de los datos a un servidor.",
+    "whatIsJitter": "¿Qué es el jitter?",
+    "whatIsJitterDesc": "El jitter mide la variación en los tiempos de ping.",
+    "whatIsPacketLoss": "¿Qué es la pérdida de paquetes?",
+    "whatIsPacketLossDesc": "La pérdida de paquetes mide el porcentaje de paquetes de datos que no llegan.",
+    "whatIsBufferbloat": "¿Qué es el bufferbloat?",
+    "whatIsBufferbloatDesc": "El bufferbloat es la latencia excesiva causada por el almacenamiento en búfer de datos en equipos de red."
+  }
+}
