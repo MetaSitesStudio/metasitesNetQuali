@@ -121,21 +121,31 @@ export function Navigation() {
       </header>
 
       {/* ====== MOBILE BOTTOM NAV ====== */}
-      <nav className="mobile-nav nav-surface fixed bottom-0 left-0 right-0 z-50"
-        style={{ borderTop: '1px solid var(--border)', borderBottom: 'none', paddingBottom: 'env(safe-area-inset-bottom, 6px)' }}
+      <nav className="mobile-nav nav-surface"
+        style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
+          borderTop: '1px solid var(--border)',
+          paddingBottom: 'env(safe-area-inset-bottom, 6px)',
+        }}
       >
-        <div className="flex items-center justify-around mx-auto px-6 py-1.5" style={{ maxWidth: 420 }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+          maxWidth: 420, margin: '0 auto', padding: '6px 24px',
+        }}>
           {tabs.map(({ id, icon: Icon, labelKey }) => {
             const isActive = activeTab === id;
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className="touch-target flex flex-col items-center gap-0.5 flex-1 py-1.5 bg-transparent border-none cursor-pointer transition-all duration-150"
                 style={{
-                  borderRadius: 'var(--radius-md)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  gap: 2, flex: 1, padding: '6px 0',
                   background: isActive ? 'var(--accent-soft)' : 'transparent',
+                  border: 'none', cursor: 'pointer',
+                  borderRadius: 'var(--radius-md)',
                   fontFamily: 'var(--font-sans)',
+                  transition: 'all 0.15s ease',
                 }}
                 aria-label={t(labelKey)}
                 aria-current={isActive ? 'page' : undefined}
