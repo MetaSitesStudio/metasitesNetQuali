@@ -5,6 +5,7 @@ import { Navigation } from './components/Navigation';
 import { Dashboard } from './pages/Dashboard';
 import { History } from './pages/History';
 import { Settings } from './pages/Settings';
+import { resumeAutoTestIfNeeded } from './engine/autoTest';
 
 function useThemeEffect() {
   const theme = useStore((s) => s.theme);
@@ -36,7 +37,7 @@ export default function App() {
   const activeTab = useStore((s) => s.activeTab);
   const loadHistory = useStore((s) => s.loadHistory);
 
-  useEffect(() => { loadHistory(); }, [loadHistory]);
+  useEffect(() => { loadHistory(); resumeAutoTestIfNeeded(); }, [loadHistory]);
 
   return (
     <>

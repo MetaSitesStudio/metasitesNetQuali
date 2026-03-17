@@ -2,23 +2,27 @@ import { useStore } from '../store/useStore';
 import type { TestResult } from '../types';
 import { getGrade, getConnectionType, detectISP, generateId } from './utils';
 import { computeQualityScore } from './qualityScore';
+import { getServerById, getDefaultServerId } from './serverLocations';
 
 let abortController: AbortController | null = null;
 
 /**
  * Client-side speed test engine.
- * Uses Cloudflare's speed test endpoints with MULTI-CONNECTION parallel streams
+ * Uses configurable server endpoints with MULTI-CONNECTION parallel streams
  * to saturate bandwidth and get accurate measurements (same technique as speedtest.net/fast.com).
  */
 
-const CF_DOWN = 'https://speed.cloudflare.com/__down';
-const CF_UP = 'https://speed.cloudflare.com/__up';
+function getEndpoints() {
+  const server = getServerById(getDefaultServerId());
+  return { CF_DOWN: server.endpoint.down, CF_UP: server.endpoint.up, serverName: server.name };
+}
 
 // === DOWNLOAD ===
 async function measureDownload(
   onProgress: (mbps: number, progress: number) => void,
   signal: AbortSignal,
 ): Promise<number> {
+  const { CF_DOWN } = getEndpoints();
   const PARALLEL = 6;          // 6 concurrent streams (like speedtest.net)
   const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB per chunk — needs to be large to avoid per-request overhead
   const TEST_DURATION = 10000; // 10 seconds
@@ -89,6 +93,7 @@ async function measureUpload(
   onProgress: (mbps: number, progress: number) => void,
   signal: AbortSignal,
 ): Promise<number> {
+  const { CF_UP } = getEndpoints();
   const PARALLEL = 4;
   const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB per upload chunk
   const TEST_DURATION = 8000;
@@ -147,6 +152,7 @@ async function measureUpload(
 async function measurePing(
   signal: AbortSignal,
 ): Promise<{ ping: number; jitter: number; packetLoss: number }> {
+  const { CF_DOWN } = getEndpoints();
   const pings: number[] = [];
   const totalRequests = 20;
   let failed = 0;
@@ -189,6 +195,7 @@ async function measureBufferbloat(
   idlePing: number,
   signal: AbortSignal,
 ): Promise<number> {
+  const { CF_DOWN } = getEndpoints();
   const loadPings: number[] = [];
 
   // Create sustained background load (3 large downloads)
@@ -226,6 +233,7 @@ async function measureBufferbloat(
 // Since we can't isolate pure DNS from cross-origin fetches, we measure
 // the total time for a 1-byte fetch (which is dominated by DNS + TCP + TLS).
 async function measureDNS(signal: AbortSignal): Promise<number> {
+  const { CF_DOWN } = getEndpoints();
   const times: number[] = [];
 
   for (let i = 0; i < 3 && !signal.aborted; i++) {
@@ -315,6 +323,7 @@ export async function runSpeedTest(): Promise<TestResult | null> {
 
     const grade = getGrade({ download, upload, ping, jitter, packetLoss, bufferbloat });
     const qualityScore = computeQualityScore({ download, upload, ping, jitter, packetLoss, bufferbloat });
+    const { serverName } = getEndpoints();
 
     const result: TestResult = {
       id: generateId(),
@@ -330,6 +339,7 @@ export async function runSpeedTest(): Promise<TestResult | null> {
       grade,
       qualityScore,
       dnsSpeed: Math.round(dnsSpeed * 100) / 100,
+      serverLocation: serverName,
     };
 
     store.setLatestResult(result);
