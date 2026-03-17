@@ -23,58 +23,69 @@ async function measureDownload(
   signal: AbortSignal,
 ): Promise<number> {
   const { CF_DOWN } = getEndpoints();
-  const PARALLEL = 6;          // 6 concurrent streams (like speedtest.net)
-  const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB per chunk — needs to be large to avoid per-request overhead
-  const TEST_DURATION = 10000; // 10 seconds
+  const TEST_DURATION = 12000;
+  const PARALLEL = 4;
   const startTime = performance.now();
 
+  let chunkSize = 256 * 1024; // Start with 256KB — adapts up for fast connections
   let totalBytes = 0;
-  let peakMbps = 0;
-  const recentSpeeds: number[] = [];
+  let measureBytes = 0;
+  let measureStart = 0;
+  let warmupDone = false;
+  let chunkCount = 0;
 
-  // Continuously launch parallel download streams
   async function downloadWorker(id: number) {
     while (performance.now() - startTime < TEST_DURATION && !signal.aborted) {
-      const chunkStart = performance.now();
       try {
         const response = await fetch(
-          `${CF_DOWN}?bytes=${CHUNK_SIZE}&cachebust=${Date.now()}-${id}-${Math.random()}`,
+          `${CF_DOWN}?bytes=${chunkSize}&cachebust=${Date.now()}-${id}-${Math.random()}`,
           { signal, cache: 'no-store', mode: 'cors' },
         );
         if (!response.ok) throw new Error('fetch failed');
         const data = await response.arrayBuffer();
-        const elapsed = (performance.now() - chunkStart) / 1000;
+        const elapsed = (performance.now() - startTime) / 1000;
         totalBytes += data.byteLength;
+        chunkCount++;
 
-        const chunkMbps = (data.byteLength * 8) / (elapsed * 1_000_000);
-        recentSpeeds.push(chunkMbps);
+        // Discard first 2 chunks as warmup for accuracy
+        if (chunkCount > 2 && !warmupDone) {
+          warmupDone = true;
+          measureStart = performance.now();
+        }
+        if (warmupDone) measureBytes += data.byteLength;
+
+        // Adaptive chunk sizing
+        const instantMbps = elapsed > 0 ? (totalBytes * 8) / (elapsed * 1_000_000) : 0;
+        if (instantMbps > 50 && chunkSize < 4 * 1024 * 1024) chunkSize = Math.min(chunkSize * 2, 4 * 1024 * 1024);
+        else if (instantMbps > 10 && chunkSize < 2 * 1024 * 1024) chunkSize = Math.min(chunkSize * 2, 2 * 1024 * 1024);
+        else if (instantMbps < 2 && chunkSize > 128 * 1024) chunkSize = Math.max(128 * 1024, chunkSize / 2);
       } catch {
-        // If Cloudflare is blocked, try with smaller chunk
         try {
           const response = await fetch(
-            `${CF_DOWN}?bytes=${1024 * 1024}&cachebust=${Date.now()}-${id}-fb`,
+            `${CF_DOWN}?bytes=${128 * 1024}&cachebust=${Date.now()}-${id}-fb`,
             { signal, cache: 'no-store' },
           );
           const data = await response.arrayBuffer();
           totalBytes += data.byteLength;
-        } catch {
-          // Complete connection failure — skip
-        }
+          if (warmupDone) measureBytes += data.byteLength;
+          chunkSize = 128 * 1024;
+        } catch { /* skip */ }
       }
     }
   }
 
-  // Launch all workers in parallel
   const workers: Promise<void>[] = [];
-  for (let i = 0; i < PARALLEL; i++) {
-    workers.push(downloadWorker(i));
-  }
+  for (let i = 0; i < PARALLEL; i++) workers.push(downloadWorker(i));
 
-  // Progress reporter
   const progressInterval = setInterval(() => {
-    const elapsed = (performance.now() - startTime) / 1000;
-    const currentMbps = (totalBytes * 8) / (elapsed * 1_000_000);
-    peakMbps = Math.max(peakMbps, currentMbps);
+    let currentMbps: number;
+    if (warmupDone && measureStart > 0) {
+      const measureElapsed = (performance.now() - measureStart) / 1000;
+      currentMbps = measureElapsed > 0 ? (measureBytes * 8) / (measureElapsed * 1_000_000) : 0;
+    } else {
+      const elapsed = (performance.now() - startTime) / 1000;
+      currentMbps = elapsed > 0 ? (totalBytes * 8) / (elapsed * 1_000_000) : 0;
+    }
     const progress = Math.min(((performance.now() - startTime) / TEST_DURATION) * 100, 100);
     onProgress(currentMbps, progress);
     useStore.getState().addSpeedGraphPoint(currentMbps, 'download');
@@ -83,10 +94,12 @@ async function measureDownload(
   await Promise.allSettled(workers);
   clearInterval(progressInterval);
 
+  if (warmupDone && measureStart > 0) {
+    const measureElapsed = (performance.now() - measureStart) / 1000;
+    return (measureBytes * 8) / (measureElapsed * 1_000_000);
+  }
   const totalElapsed = (performance.now() - startTime) / 1000;
-  const avgMbps = (totalBytes * 8) / (totalElapsed * 1_000_000);
-
-  return avgMbps;
+  return (totalBytes * 8) / (totalElapsed * 1_000_000);
 }
 
 // === UPLOAD ===
@@ -95,49 +108,67 @@ async function measureUpload(
   signal: AbortSignal,
 ): Promise<number> {
   const { CF_UP } = getEndpoints();
-  const PARALLEL = 4;
-  const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB per upload chunk
-  const TEST_DURATION = 8000;
+  const PARALLEL = 3;
+  const TEST_DURATION = 10000;
   const startTime = performance.now();
 
+  let chunkSize = 256 * 1024; // Start small, adapt up
   let totalBytes = 0;
-
-  // Pre-generate upload payload (reusable)
-  const payload = new ArrayBuffer(CHUNK_SIZE);
-  const blob = new Blob([payload]);
+  let measureBytes = 0;
+  let measureStart = 0;
+  let warmupDone = false;
+  let chunkCount = 0;
 
   async function uploadWorker(id: number) {
     while (performance.now() - startTime < TEST_DURATION && !signal.aborted) {
       try {
+        const payload = new ArrayBuffer(chunkSize);
+        const blob = new Blob([payload]);
         await fetch(
           `${CF_UP}?cachebust=${Date.now()}-${id}-${Math.random()}`,
           { method: 'POST', body: blob, signal, cache: 'no-store' },
         );
-        totalBytes += CHUNK_SIZE;
+        totalBytes += chunkSize;
+        chunkCount++;
+
+        if (chunkCount > 2 && !warmupDone) {
+          warmupDone = true;
+          measureStart = performance.now();
+        }
+        if (warmupDone) measureBytes += chunkSize;
+
+        // Adaptive chunk sizing
+        const elapsed = (performance.now() - startTime) / 1000;
+        const instantMbps = elapsed > 0 ? (totalBytes * 8) / (elapsed * 1_000_000) : 0;
+        if (instantMbps > 30 && chunkSize < 2 * 1024 * 1024) chunkSize = Math.min(chunkSize * 2, 2 * 1024 * 1024);
+        else if (instantMbps < 2 && chunkSize > 128 * 1024) chunkSize = Math.max(128 * 1024, chunkSize / 2);
       } catch {
-        // Try with smaller payload
         try {
-          const smallBlob = new Blob([new ArrayBuffer(512 * 1024)]);
+          const smallBlob = new Blob([new ArrayBuffer(128 * 1024)]);
           await fetch(
             `${CF_UP}?cachebust=${Date.now()}-${id}-fb`,
             { method: 'POST', body: smallBlob, signal, cache: 'no-store' },
           );
-          totalBytes += 512 * 1024;
-        } catch {
-          // skip
-        }
+          totalBytes += 128 * 1024;
+          if (warmupDone) measureBytes += 128 * 1024;
+          chunkSize = 128 * 1024;
+        } catch { /* skip */ }
       }
     }
   }
 
   const workers: Promise<void>[] = [];
-  for (let i = 0; i < PARALLEL; i++) {
-    workers.push(uploadWorker(i));
-  }
+  for (let i = 0; i < PARALLEL; i++) workers.push(uploadWorker(i));
 
   const progressInterval = setInterval(() => {
-    const elapsed = (performance.now() - startTime) / 1000;
-    const currentMbps = (totalBytes * 8) / (elapsed * 1_000_000);
+    let currentMbps: number;
+    if (warmupDone && measureStart > 0) {
+      const measureElapsed = (performance.now() - measureStart) / 1000;
+      currentMbps = measureElapsed > 0 ? (measureBytes * 8) / (measureElapsed * 1_000_000) : 0;
+    } else {
+      const elapsed = (performance.now() - startTime) / 1000;
+      currentMbps = elapsed > 0 ? (totalBytes * 8) / (elapsed * 1_000_000) : 0;
+    }
     const progress = Math.min(((performance.now() - startTime) / TEST_DURATION) * 100, 100);
     onProgress(currentMbps, progress);
     useStore.getState().addSpeedGraphPoint(currentMbps, 'upload');
@@ -146,6 +177,10 @@ async function measureUpload(
   await Promise.allSettled(workers);
   clearInterval(progressInterval);
 
+  if (warmupDone && measureStart > 0) {
+    const measureElapsed = (performance.now() - measureStart) / 1000;
+    return (measureBytes * 8) / (measureElapsed * 1_000_000);
+  }
   const totalElapsed = (performance.now() - startTime) / 1000;
   return (totalBytes * 8) / (totalElapsed * 1_000_000);
 }

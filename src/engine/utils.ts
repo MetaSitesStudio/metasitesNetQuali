@@ -75,15 +75,14 @@ export function formatPing(ms: number): string {
 
 /**
  * Detect connection type using the Network Information API.
- * The API's `type` field gives the physical transport (wifi, ethernet, cellular),
- * while `effectiveType` is a throughput estimate (4g, 3g, etc.) that always says "4g" for fast WiFi.
- * We prioritize `type` over `effectiveType` for accurate reporting.
+ * On mobile: shows 4G/3G/2G (what users expect to see).
+ * On desktop: shows WiFi/Ethernet.
  */
 export function getConnectionType(): string {
   const nav = navigator as any;
   if (nav.connection) {
     const c = nav.connection;
-    // `type` gives the actual physical connection: wifi, ethernet, cellular, bluetooth, etc.
+    // `type` gives the physical connection: wifi, ethernet, cellular, etc.
     if (c.type) {
       switch (c.type) {
         case 'wifi': return 'WiFi';
@@ -91,42 +90,67 @@ export function getConnectionType(): string {
         case 'cellular': return c.effectiveType ? c.effectiveType.toUpperCase() : 'Cellular';
         case 'bluetooth': return 'Bluetooth';
         case 'wimax': return 'WiMAX';
+        case 'none': return 'Offline';
         default: return c.type;
       }
     }
-    // Fallback: if `type` is unavailable (some Chrome versions), infer from context
-    // Check if we're on a desktop browser — almost certainly WiFi or Ethernet
-    if (!('ontouchstart' in window) && !navigator.maxTouchPoints) {
+    // If `type` is unavailable, use effectiveType (4g/3g/2g)
+    // This is common on Android Chrome where type isn't exposed
+    if (c.effectiveType) {
+      // On a touch device, effectiveType is meaningful (shows 4G/3G)
+      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        return c.effectiveType.toUpperCase();
+      }
+      // On desktop, effectiveType always says 4g for fast connections — not useful
       return 'WiFi / Ethernet';
     }
-    // Don't show effectiveType (4g/3g) as it confuses WiFi users
-    return 'WiFi';
   }
   return 'Unknown';
 }
 
 /**
- * Detect ISP by calling a free IP information API.
+ * Detect ISP by calling IP information APIs.
+ * Tries multiple free APIs in order for reliability.
  */
 export async function detectISP(): Promise<{ isp: string; ip: string }> {
+  // Try ip-api.com first (no key needed, good ISP data, 45 req/min)
   try {
-    const res = await fetch('https://ipinfo.io/json?token=', { cache: 'no-store' });
-    if (!res.ok) throw new Error('IP info fetch failed');
-    const data = await res.json();
-    return {
-      isp: data.org ? data.org.replace(/^AS\d+\s*/, '') : 'Unknown',
-      ip: data.ip || '',
-    };
-  } catch {
-    try {
-      // Fallback API
-      const res = await fetch('https://api.ipify.org?format=json');
+    const res = await fetch('http://ip-api.com/json/?fields=query,isp,org', {
+      cache: 'no-store',
+    });
+    if (res.ok) {
       const data = await res.json();
-      return { isp: 'Unknown', ip: data.ip || '' };
-    } catch {
-      return { isp: 'Unknown', ip: '' };
+      if (data.isp && data.isp !== '') {
+        return { isp: data.isp, ip: data.query || '' };
+      }
     }
-  }
+  } catch { /* continue to next */ }
+  
+  // Fallback: ipapi.co (free tier, 1000/day)
+  try {
+    const res = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        isp: data.org || data.asn || 'Unknown',
+        ip: data.ip || '',
+      };
+    }
+  } catch { /* continue to next */ }
+
+  // Second fallback: ipinfo.io
+  try {
+    const res = await fetch('https://ipinfo.io/json', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        isp: data.org ? data.org.replace(/^AS\d+\s*/, '') : 'Unknown',
+        ip: data.ip || '',
+      };
+    }
+  } catch { /* all failed */ }
+
+  return { isp: 'Unknown', ip: '' };
 }
 
 export function generateId(): string {
