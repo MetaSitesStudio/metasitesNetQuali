@@ -222,26 +222,26 @@ async function measureBufferbloat(
 }
 
 // === DNS MEASUREMENT ===
+// Measures DNS+connection resolution time using tiny Cloudflare requests.
+// Since we can't isolate pure DNS from cross-origin fetches, we measure
+// the total time for a 1-byte fetch (which is dominated by DNS + TCP + TLS).
 async function measureDNS(signal: AbortSignal): Promise<number> {
-  const domains = [
-    'https://cloudflare.com/cdn-cgi/trace',
-    'https://www.google.com/generate_204',
-    'https://www.apple.com/library/test/success.html',
-    'https://connectivity-check.ubuntu.com/',
-  ];
   const times: number[] = [];
 
-  for (const url of domains) {
-    if (signal.aborted) break;
+  for (let i = 0; i < 3 && !signal.aborted; i++) {
     const start = performance.now();
     try {
-      await fetch(url, { signal, cache: 'no-store', mode: 'no-cors' });
+      await fetch(`${CF_DOWN}?bytes=1&cachebust=dns-${Date.now()}-${i}`, {
+        signal, cache: 'no-store', mode: 'cors',
+      });
       times.push(performance.now() - start);
     } catch { /* skip */ }
   }
 
   if (times.length === 0) return 0;
-  return times.reduce((a, b) => a + b, 0) / times.length;
+  // Return median for stability
+  times.sort((a, b) => a - b);
+  return times[Math.floor(times.length / 2)];
 }
 
 // === MAIN TEST RUNNER ===
