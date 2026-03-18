@@ -1,7 +1,7 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import type { TestResult } from '../types';
 
-const DB_NAME = 'netqual-db';
+const DB_NAME = 'speedfox-db';
 const DB_VERSION = 1;
 const STORE_NAME = 'results';
 

@@ -47,7 +47,7 @@ export function useNetworkMonitor() {
 
     // Save to localStorage
     try {
-      localStorage.setItem('netqual-alerts', JSON.stringify(alerts.current));
+      localStorage.setItem('speedfox-alerts', JSON.stringify(alerts.current));
     } catch { /* storage full */ }
 
     return newAlert;
@@ -56,7 +56,7 @@ export function useNetworkMonitor() {
   useEffect(() => {
     // Load saved alerts
     try {
-      const saved = localStorage.getItem('netqual-alerts');
+      const saved = localStorage.getItem('speedfox-alerts');
       if (saved) alerts.current = JSON.parse(saved);
     } catch { /* ignore */ }
 
@@ -137,7 +137,7 @@ export function useNetworkMonitor() {
 
   const clearAlerts = useCallback(() => {
     alerts.current = [];
-    localStorage.removeItem('netqual-alerts');
+    localStorage.removeItem('speedfox-alerts');
   }, []);
 
   const getNetworkStatus = useCallback((): NetworkInfo | null => {

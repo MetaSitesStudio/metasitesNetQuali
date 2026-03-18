@@ -1,5 +1,5 @@
 {
-  "app": { "name": "NetQual", "tagline": "인터넷 진단" },
+  "app": { "name": "Speedfox", "tagline": "인터넷 진단" },
   "nav": { "dashboard": "대시보드", "history": "기록", "settings": "설정" },
   "dashboard": { "startTest": "테스트 시작", "stopTest": "중지", "testing": "테스트 중...", "ready": "테스트 준비 완료", "download": "다운로드", "upload": "업로드", "ping": "핑", "jitter": "지터", "packetLoss": "패킷 손실", "bufferbloat": "버퍼블로트", "connectionType": "연결", "mbps": "Mbps", "ms": "ms", "percent": "%", "grade": "등급", "excellent": "우수", "good": "양호", "fair": "보통", "poor": "나쁨", "runAgain": "다시 테스트", "viewDetails": "상세 보기", "share": "공유", "testComplete": "테스트 완료", "downloadPhase": "다운로드 속도 측정 중...", "uploadPhase": "업로드 속도 측정 중...", "pingPhase": "대기시간 측정 중...", "jitterPhase": "지터 분석 중...", "packetLossPhase": "패킷 손실 확인 중...", "bufferbloatPhase": "버퍼블로트 감지 중...", "idle": "탭하여 시작" },
   "history": { "title": "테스트 기록", "noResults": "결과 없음", "noResultsDesc": "첫 번째 속도 테스트를 실행하세요", "clearAll": "전체 삭제", "confirmClear": "모든 기록을 삭제하시겠습니까?", "today": "오늘", "yesterday": "어제", "thisWeek": "이번 주", "older": "이전", "trends": "트렌드", "period24h": "24시간", "period7d": "7일", "period30d": "30일" },

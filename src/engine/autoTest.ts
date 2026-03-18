@@ -7,7 +7,7 @@ export interface AutoTestConfig {
   nextRun: number;       // timestamp
 }
 
-const STORAGE_KEY = 'netqual-autotest';
+const STORAGE_KEY = 'speedfox-autotest';
 let intervalId: ReturnType<typeof setInterval> | null = null;
 
 export function getAutoTestConfig(): AutoTestConfig {

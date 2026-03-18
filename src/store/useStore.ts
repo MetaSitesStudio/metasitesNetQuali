@@ -123,14 +123,14 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   // Settings
-  theme: (localStorage.getItem('netqual-theme') as ThemeMode) || 'system',
+  theme: (localStorage.getItem('speedfox-theme') as ThemeMode) || 'system',
   setTheme: (theme) => {
-    localStorage.setItem('netqual-theme', theme);
+    localStorage.setItem('speedfox-theme', theme);
     set({ theme });
   },
-  ispSpeed: Number(localStorage.getItem('netqual-isp-speed')) || 0,
+  ispSpeed: Number(localStorage.getItem('speedfox-isp-speed')) || 0,
   setIspSpeed: (ispSpeed) => {
-    localStorage.setItem('netqual-isp-speed', String(ispSpeed));
+    localStorage.setItem('speedfox-isp-speed', String(ispSpeed));
     set({ ispSpeed });
   },
 }));

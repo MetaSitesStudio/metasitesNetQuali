@@ -1,5 +1,5 @@
 {
-  "app": { "name": "NetQual", "tagline": "Diagnósticos de Internet" },
+  "app": { "name": "Speedfox", "tagline": "Diagnósticos de Internet" },
   "nav": { "dashboard": "Panel", "history": "Historial", "settings": "Ajustes" },
   "dashboard": {
     "startTest": "Iniciar prueba", "stopTest": "Detener", "testing": "Probando...",

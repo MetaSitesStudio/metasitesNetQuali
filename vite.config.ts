@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt'],
       manifest: {
-        name: 'NetQual - Internet Diagnostics',
-        short_name: 'NetQual',
+        name: 'Speedfox - Internet Diagnostics',
+        short_name: 'Speedfox',
         description: 'Comprehensive internet speed & quality diagnostics',
         theme_color: '#0f172a',
         background_color: '#0f172a',

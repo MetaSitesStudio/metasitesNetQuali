@@ -1,5 +1,5 @@
 {
-  "app": { "name": "NetQual", "tagline": "Internet Diagnostics" },
+  "app": { "name": "Speedfox", "tagline": "Internet Diagnostics" },
   "nav": { "dashboard": "Dashboard", "history": "History", "settings": "Settings" },
   "dashboard": {
     "startTest": "Start Test",

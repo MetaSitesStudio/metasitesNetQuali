@@ -52,7 +52,7 @@ i18n
     interpolation: { escapeValue: false },
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
-      lookupLocalStorage: 'netqual-language',
+      lookupLocalStorage: 'speedfox-language',
       caches: ['localStorage'],
     },
   });

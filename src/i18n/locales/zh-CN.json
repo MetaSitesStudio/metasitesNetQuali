@@ -1,5 +1,5 @@
 {
-  "app": { "name": "NetQual", "tagline": "网络诊断" },
+  "app": { "name": "Speedfox", "tagline": "网络诊断" },
   "nav": { "dashboard": "仪表板", "history": "历史", "settings": "设置" },
   "dashboard": { "startTest": "开始测试", "stopTest": "停止", "testing": "测试中...", "ready": "准备测试", "download": "下载", "upload": "上传", "ping": "延迟", "jitter": "抖动", "packetLoss": "丢包率", "bufferbloat": "缓冲区膨胀", "connectionType": "连接", "mbps": "Mbps", "ms": "ms", "percent": "%", "grade": "等级", "excellent": "优秀", "good": "良好", "fair": "一般", "poor": "差", "runAgain": "重新测试", "viewDetails": "查看详情", "share": "分享", "testComplete": "测试完成", "downloadPhase": "正在测试下载速度...", "uploadPhase": "正在测试上传速度...", "pingPhase": "正在测量延迟...", "jitterPhase": "正在分析抖动...", "packetLossPhase": "正在检查丢包率...", "bufferbloatPhase": "正在检测缓冲区膨胀...", "idle": "点击开始" },
   "history": { "title": "测试历史", "noResults": "暂无结果", "noResultsDesc": "运行你的第一次速度测试", "clearAll": "清除全部", "confirmClear": "清除所有历史记录？", "today": "今天", "yesterday": "昨天", "thisWeek": "本周", "older": "更早", "trends": "趋势", "period24h": "24小时", "period7d": "7天", "period30d": "30天" },

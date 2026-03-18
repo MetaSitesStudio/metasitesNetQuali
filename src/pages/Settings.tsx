@@ -259,7 +259,7 @@ export function Settings() {
             ) : (
               <>
                 <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 10, marginTop: -4 }}>
-                  Install NetQual as a native app for quick access and offline support.
+                  Install Speedfox as a native app for quick access and offline support.
                 </p>
                 <button
                   onClick={install}
@@ -277,7 +277,7 @@ export function Settings() {
                   }}
                 >
                   <Smartphone size={15} />
-                  Install NetQual
+                  Install Speedfox
                 </button>
               </>
             )}
@@ -370,7 +370,7 @@ export function Settings() {
                   key={lang.code}
                   onClick={() => {
                     i18n.changeLanguage(lang.code);
-                    localStorage.setItem('netqual-language', lang.code);
+                    localStorage.setItem('speedfox-language', lang.code);
                   }}
                   className="flex items-center gap-2.5 cursor-pointer"
                   style={{

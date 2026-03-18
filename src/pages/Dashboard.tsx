@@ -92,10 +92,7 @@ export function Dashboard() {
         {/* MOBILE HEADER */}
         <div className="text-center mb-6 lg:hidden">
           <div className="flex items-center justify-center gap-2 mb-1">
-            <img src="/logo.png" alt="" className="w-7 h-7 rounded-md" />
-            <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)' }}>
-              MetaSites <span className="gradient-text">NetQual</span>
-            </h1>
+            <img src="/logo_speedfox.png" alt="Speedfox" style={{ height: 28 }} />
           </div>
           {(connectionType !== 'unknown' || (ispName && ispName !== 'Unknown')) && (
             <div className="flex items-center justify-center gap-3 mt-1">
@@ -114,9 +111,21 @@ export function Dashboard() {
         </div>
 
         {/* MAIN LAYOUT */}
-        <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-center lg:gap-12 xl:gap-16">
+        <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-center lg:gap-8 xl:gap-12">
 
-          {/* LEFT: Gauge + CTA */}
+          {/* FAR LEFT: Hero mascot (desktop only) */}
+          <div className="hidden lg:flex items-center justify-center flex-shrink-0" style={{ alignSelf: 'center' }}>
+            <motion.img
+              src="/SpeedFox_hero.png"
+              alt="Speedfox Mascot"
+              style={{ height: 'clamp(300px, 55vh, 600px)', objectFit: 'contain', filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.5))' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            />
+          </div>
+
+          {/* CENTER: Gauge + CTA */}
           <div className="flex flex-col items-center flex-shrink-0 mb-6 lg:mb-0">
             {/* Status pill */}
             <AnimatePresence mode="wait">

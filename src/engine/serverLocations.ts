@@ -80,9 +80,9 @@ export function getServerById(id: string): ServerLocation {
 }
 
 export function getDefaultServerId(): string {
-  return localStorage.getItem('netqual-server') || 'auto';
+  return localStorage.getItem('speedfox-server') || 'auto';
 }
 
 export function setDefaultServerId(id: string): void {
-  localStorage.setItem('netqual-server', id);
+  localStorage.setItem('speedfox-server', id);
 }

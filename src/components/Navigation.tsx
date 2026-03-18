@@ -34,11 +34,7 @@ export function Navigation() {
         >
           {/* Brand */}
           <div className="flex items-center gap-2.5 mr-10 flex-shrink-0">
-            <img src="/logo.png" alt="" className="w-7 h-7 rounded-md object-contain" />
-            <span className="text-[15px] font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              MetaSites{' '}
-              <span className="gradient-text">NetQual</span>
-            </span>
+            <img src="/logo_speedfox.png" alt="Speedfox" style={{ height: 32 }} />
           </div>
 
           {/* Tab nav — segmented pill style */}

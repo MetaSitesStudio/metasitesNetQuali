@@ -42,7 +42,7 @@ export function exportHistoryCSV(results: TestResult[]): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `netqual-results-${new Date().toISOString().split('T')[0]}.csv`;
+  a.download = `speedfox-results-${new Date().toISOString().split('T')[0]}.csv`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -71,7 +71,7 @@ export async function generateShareImage(result: TestResult): Promise<Blob> {
   // Title
   ctx.fillStyle = '#f1f5f9';
   ctx.font = 'bold 18px Inter, system-ui, sans-serif';
-  ctx.fillText('MetaSites NetQual', 28, 38);
+  ctx.fillText('Speedfox', 28, 38);
 
   ctx.fillStyle = '#4b5972';
   ctx.font = '12px Inter, system-ui, sans-serif';
@@ -133,7 +133,7 @@ export async function generateShareImage(result: TestResult): Promise<Blob> {
   // Footer
   ctx.fillStyle = '#4b5972';
   ctx.font = '10px Inter, system-ui, sans-serif';
-  ctx.fillText('metasites.io/netqual', 28, 326);
+  ctx.fillText('speedfox.app', 28, 326);
 
   return new Promise((resolve) => {
     canvas.toBlob((blob) => resolve(blob!), 'image/png');
@@ -145,12 +145,12 @@ export async function generateShareImage(result: TestResult): Promise<Blob> {
  */
 export async function shareResult(result: TestResult): Promise<void> {
   const blob = await generateShareImage(result);
-  const file = new File([blob], 'netqual-result.png', { type: 'image/png' });
+  const file = new File([blob], 'speedfox-result.png', { type: 'image/png' });
 
   if (navigator.share) {
     try {
       await navigator.share({
-        title: 'MetaSites NetQual Results',
+        title: 'Speedfox Results',
         text: `Download: ${formatSpeed(result.download)} Mbps | Upload: ${formatSpeed(result.upload)} Mbps | Ping: ${formatPing(result.ping)} ms | Score: ${result.qualityScore ?? '—'}/100`,
         files: [file],
       });
@@ -164,7 +164,7 @@ export async function shareResult(result: TestResult): Promise<void> {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'netqual-result.png';
+  a.download = 'speedfox-result.png';
   a.click();
   URL.revokeObjectURL(url);
 }
