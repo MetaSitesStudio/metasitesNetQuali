@@ -14,13 +14,22 @@ import {
   Share2,
   Lightbulb,
   Tv,
+  Search,
 } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { SpeedFoxMascot } from '../components/SpeedFoxMascot';
 import { MetricCard } from '../components/MetricCard';
 import { PromoWidgetSlot } from '../components/PromoWidgetSlot';
 import { formatSpeed, formatPing, gradeColor, pingColor } from '../engine/utils';
-import { getScoreTier, getPlanUtilization, getRecommendations } from '../engine/qualityScore';
+import {
+  getScoreTier,
+  getPlanUtilization,
+  getRecommendations,
+  getVerdictInterpretation,
+  getUseCaseFitness,
+  getLikelyCause,
+  type FitnessLevel,
+} from '../engine/qualityScore';
 import { shareResult } from '../engine/exportShare';
 import { getMaxVideoQuality, getEstimatedLoadTime, getBufferingEstimate } from '../engine/videoQuality';
 
@@ -35,6 +44,17 @@ function getMascotReaction(grade: string): string {
   }
 }
 
+const FITNESS_COLOR: Record<FitnessLevel, string> = {
+  great: 'var(--accent-green)',
+  okay: 'var(--accent-orange)',
+  weak: 'var(--accent-red)',
+};
+const FITNESS_LABEL: Record<FitnessLevel, string> = {
+  great: 'Great',
+  okay: 'Okay',
+  weak: 'Weak',
+};
+
 export function ResultsScreen() {
   const { t } = useTranslation();
   const latestResult = useStore((s) => s.latestResult);
@@ -48,6 +68,9 @@ export function ResultsScreen() {
   const scoreTier = getScoreTier(qualityScore);
   const planUtil = ispSpeed > 0 ? getPlanUtilization(download, ispSpeed) : 0;
   const recommendations = getRecommendations(latestResult, ispSpeed);
+  const verdictText = getVerdictInterpretation(qualityScore);
+  const useCases = getUseCaseFitness(latestResult);
+  const likelyCause = getLikelyCause(latestResult);
   const mascotState = (grade === 'excellent' || grade === 'good') ? 'success' as const : 'warning' as const;
   const vq = getMaxVideoQuality(download);
   const loadTime = getEstimatedLoadTime(download);
@@ -62,14 +85,13 @@ export function ResultsScreen() {
     <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px 80px' }}>
 
       {/* ═══════════════════════════════════════════════════
-          ZONE A — RESULT REPORT (upper section)
+          ZONE A — RESULT REPORT
           ═══════════════════════════════════════════════════ */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
-        {/* 2-column desktop: LEFT = mascot reaction | RIGHT = verdict + data */}
         <div
           className="results-hero-grid"
           style={{ paddingTop: 24, marginBottom: 40 }}
@@ -81,7 +103,6 @@ export function ResultsScreen() {
           >
             <SpeedFoxMascot state={mascotState} />
 
-            {/* Reaction text */}
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -109,7 +130,7 @@ export function ResultsScreen() {
 
           {/* ── RIGHT COLUMN: Verdict + Metrics + Insights ── */}
           <div>
-            {/* ▸ Verdict block — the hero of the results page */}
+            {/* ▸ Verdict block */}
             <div
               className="panel"
               style={{
@@ -142,21 +163,33 @@ export function ResultsScreen() {
                   </span>
                 </div>
 
-                {/* Verdict text */}
+                {/* Verdict text + interpretation */}
                 <div className="flex-1">
                   <div style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4, letterSpacing: '-0.01em' }}>
                     {scoreTier.label}
                   </div>
-                  <div className="flex items-center gap-2" style={{ marginBottom: 8 }}>
+                  <div className="flex items-center gap-2" style={{ marginBottom: 10 }}>
                     <Award size={16} style={{ color: gradeColor(grade) }} />
                     <span style={{ fontSize: 14, fontWeight: 600, color: gradeColor(grade) }}>
                       {t(`dashboard.${grade}`)} Quality
                     </span>
                   </div>
 
-                  {/* ISP plan utilization — inline if available */}
+                  {/* NEW: plain-language interpretation */}
+                  <p style={{
+                    fontSize: 13,
+                    fontWeight: 400,
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.6,
+                    margin: 0,
+                    maxWidth: 480,
+                  }}>
+                    {verdictText}
+                  </p>
+
+                  {/* ISP plan utilization */}
                   {ispSpeed > 0 && (
-                    <div style={{ maxWidth: 240, marginTop: 8 }}>
+                    <div style={{ maxWidth: 240, marginTop: 12 }}>
                       <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
                         <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-tertiary)' }}>ISP Plan Usage</span>
                         <span style={{
@@ -178,7 +211,7 @@ export function ResultsScreen() {
                   )}
                 </div>
 
-                {/* Action buttons — right-aligned on desktop */}
+                {/* Action buttons */}
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <motion.button
                     onClick={handleTestAgain}
@@ -198,7 +231,7 @@ export function ResultsScreen() {
                     whileHover={{ scale: 1.03 }}
                   >
                     <RotateCcw size={14} />
-                    {t('dashboard.runAgain')}
+                    Test Again
                   </motion.button>
                   <motion.button
                     onClick={() => shareResult(latestResult)}
@@ -236,6 +269,59 @@ export function ResultsScreen() {
               <MetricCard icon={Gauge} label="QUALITY" value={qualityScore.toString()} unit="/100" color={scoreTier.color} delay={0.4} />
             </div>
 
+            {/* ▸ Use-Case Fitness Grid — NEW */}
+            <motion.div
+              className="panel"
+              style={{ padding: '20px 24px', marginBottom: 24 }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+            >
+              <div className="section-label" style={{ marginBottom: 16 }}>
+                <Tv size={12} />
+                What your connection is good for
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 10 }}>
+                {useCases.map((uc, i) => (
+                  <motion.div
+                    key={uc.label}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35 + i * 0.06 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      padding: '10px 14px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: 'var(--bg-inset)',
+                      border: '1px solid var(--border-subtle)',
+                    }}
+                  >
+                    <span style={{ fontSize: 20 }}>{uc.icon}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>
+                        {uc.label}
+                      </div>
+                      <div style={{ fontSize: 10, fontWeight: 400, color: 'var(--text-tertiary)' }}>
+                        {uc.note}
+                      </div>
+                    </div>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: FITNESS_COLOR[uc.fitness],
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      flexShrink: 0,
+                    }}>
+                      {FITNESS_LABEL[uc.fitness]}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
             {/* ▸ Interpretation row: Streaming + Recommendations side by side */}
             <div
               className="grid grid-cols-1 lg:grid-cols-2"
@@ -263,7 +349,6 @@ export function ResultsScreen() {
                     📊 Buffer {buffering}%
                   </span>
                 </div>
-                {/* Device icons */}
                 <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
                   {vq.devices.map((d, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -298,12 +383,37 @@ export function ResultsScreen() {
                 </div>
               )}
             </div>
+
+            {/* ▸ Likely Cause Analysis — NEW (only shown when pattern detected) */}
+            {likelyCause && (
+              <motion.div
+                className="panel"
+                style={{ padding: '18px 22px', marginTop: 16 }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+              >
+                <div className="section-label" style={{ marginBottom: 10 }}>
+                  <Search size={12} />
+                  What's likely happening
+                </div>
+                <p style={{
+                  fontSize: 13,
+                  fontWeight: 400,
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.7,
+                  margin: 0,
+                }}>
+                  {likelyCause}
+                </p>
+              </motion.div>
+            )}
           </div>
         </div>
       </motion.div>
 
       {/* ═══════════════════════════════════════════════════
-          ZONE B — PROMOTIONAL / BRAND (lower section)
+          ZONE B — AUTHORITY + PROMOTIONAL
           ═══════════════════════════════════════════════════ */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -315,9 +425,41 @@ export function ResultsScreen() {
         <div style={{
           height: 1,
           background: 'linear-gradient(90deg, transparent, var(--border), transparent)',
-          marginBottom: 40,
+          marginBottom: 32,
         }} />
 
+        {/* Authority block — subtle brand positioning */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: 32,
+          padding: '0 24px',
+        }}>
+          <div style={{
+            fontSize: 11,
+            fontWeight: 600,
+            color: 'var(--text-tertiary)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            marginBottom: 8,
+            opacity: 0.7,
+          }}>
+            SpeedFox · Built by MetaSites Studio
+          </div>
+          <p style={{
+            fontSize: 12,
+            fontWeight: 400,
+            color: 'var(--text-tertiary)',
+            lineHeight: 1.6,
+            margin: '0 auto',
+            maxWidth: 420,
+            opacity: 0.6,
+          }}>
+            We build tools that work. No fluff, no gimmicks.
+            SpeedFox is part of the MetaSites product ecosystem — practical digital tools for professionals.
+          </p>
+        </div>
+
+        {/* Bottom banner — UNCHANGED */}
         <PromoWidgetSlot />
       </motion.div>
     </div>

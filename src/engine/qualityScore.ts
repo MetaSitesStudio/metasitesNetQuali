@@ -110,3 +110,97 @@ export function getRecommendations(result: Pick<TestResult, 'download' | 'upload
   // Cap at 4 most relevant
   return tips.slice(0, 4);
 }
+
+/**
+ * Plain-language interpretation of the quality score.
+ */
+export function getVerdictInterpretation(score: number): string {
+  if (score >= 90) return 'Your connection handles everything well — streaming, gaming, video calls, and heavy cloud usage without issues.';
+  if (score >= 70) return 'Solid connection for everyday use. Streaming and video calls work well, but demanding real-time applications may occasionally feel sluggish.';
+  if (score >= 50) return 'Acceptable for basic browsing and standard streaming, but you may notice lag in video calls and buffering at higher resolutions.';
+  if (score >= 30) return 'Below average. Expect interruptions in video calls, buffering during streams, and slow cloud sync.';
+  return 'This connection is struggling. Most real-time applications will be unreliable.';
+}
+
+export type FitnessLevel = 'great' | 'okay' | 'weak';
+
+export interface UseCaseItem {
+  label: string;
+  icon: string;
+  fitness: FitnessLevel;
+  note: string;
+}
+
+/**
+ * Evaluate connection fitness for common use cases.
+ */
+export function getUseCaseFitness(
+  result: Pick<TestResult, 'download' | 'upload' | 'ping' | 'jitter' | 'packetLoss'>
+): UseCaseItem[] {
+  const { download, upload, ping, jitter, packetLoss } = result;
+  return [
+    {
+      label: 'Browsing',
+      icon: '🌐',
+      fitness: download > 10 && ping < 100 ? 'great' : download > 3 ? 'okay' : 'weak',
+      note: download > 10 ? 'Fast page loads' : download > 3 ? 'Acceptable load times' : 'Slow page loads',
+    },
+    {
+      label: 'HD Streaming',
+      icon: '📺',
+      fitness: download > 25 ? 'great' : download > 10 ? 'okay' : 'weak',
+      note: download > 25 ? 'Smooth 4K playback' : download > 10 ? '1080p comfortable' : 'Buffering likely',
+    },
+    {
+      label: 'Video Calls',
+      icon: '📹',
+      fitness: upload > 5 && ping < 50 && jitter < 15 ? 'great' : upload > 2 && ping < 100 ? 'okay' : 'weak',
+      note: ping < 50 && jitter < 10 ? 'Clear and stable' : ping < 100 ? 'Possible minor lag' : 'Expect disruptions',
+    },
+    {
+      label: 'Online Gaming',
+      icon: '🎮',
+      fitness: ping < 30 && jitter < 5 && packetLoss < 1 ? 'great' : ping < 60 && jitter < 15 ? 'okay' : 'weak',
+      note: ping < 30 ? 'Low latency, competitive-ready' : ping < 60 ? 'Casual gaming fine' : 'High ping affects responsiveness',
+    },
+    {
+      label: 'Cloud & Real-time',
+      icon: '☁️',
+      fitness: upload > 20 && packetLoss < 1 ? 'great' : upload > 5 ? 'okay' : 'weak',
+      note: upload > 20 ? 'Fast sync and uploads' : upload > 5 ? 'Upload could be stronger' : 'Slow sync expected',
+    },
+    {
+      label: 'Large Downloads',
+      icon: '📦',
+      fitness: download > 50 ? 'great' : download > 15 ? 'okay' : 'weak',
+      note: download > 50 ? `${Math.round(download)} Mbps throughput` : download > 15 ? 'Moderate speed' : 'Consider off-peak downloads',
+    },
+  ];
+}
+
+/**
+ * Analyze metric patterns to determine a likely cause/explanation.
+ */
+export function getLikelyCause(
+  result: Pick<TestResult, 'download' | 'upload' | 'ping' | 'jitter' | 'packetLoss' | 'bufferbloat'>
+): string | null {
+  const { download, upload, ping, jitter, packetLoss, bufferbloat } = result;
+
+  if (ping > 80 && bufferbloat > 50)
+    return 'Your high latency combined with bufferbloat suggests your router is not managing traffic well under load. Enabling QoS or SQM on your router would likely help.';
+
+  if (download < 20 && upload < 5)
+    return 'Both download and upload are low. This is likely an ISP-side limitation or heavy local network usage. Try testing on a wired connection to rule out WiFi issues.';
+
+  if (jitter > 10 && packetLoss > 0.5)
+    return 'Unstable connection with data loss detected. This pattern often points to WiFi interference, a degraded cable, or ISP congestion during peak hours.';
+
+  if (ping > 50 && download > 50)
+    return 'Good throughput but elevated latency. This is common with long-distance routing or VPN overhead. Check if a VPN is active.';
+
+  if (bufferbloat > 80 && download > 30)
+    return 'Your raw speed is fine, but latency spikes under load (bufferbloat) will degrade real-time applications. Router-level QoS settings would improve this significantly.';
+
+  return null;
+}
+

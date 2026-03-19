@@ -46,18 +46,18 @@ export function ScanScreen() {
     stopSpeedTest();
   };
 
-  // Phase label
-  const phaseLabel = (() => {
+  // Phase label + context
+  const phaseInfo = (() => {
     switch (phase) {
-      case 'ping': return t('dashboard.pingPhase');
-      case 'dns': return 'Measuring DNS...';
-      case 'download': return t('dashboard.downloadPhase');
-      case 'upload': return t('dashboard.uploadPhase');
-      case 'jitter': return t('dashboard.jitterPhase');
-      case 'packetLoss': return t('dashboard.packetLossPhase');
-      case 'bufferbloat': return t('dashboard.bufferbloatPhase');
-      case 'complete': return t('dashboard.testComplete');
-      default: return '';
+      case 'ping': return { label: 'Checking responsiveness...', context: 'How fast servers respond to you' };
+      case 'dns': return { label: 'Measuring DNS resolution...', context: 'How quickly domains are resolved' };
+      case 'download': return { label: 'Testing download throughput...', context: 'Your maximum receive speed' };
+      case 'upload': return { label: 'Measuring upload capacity...', context: 'Your maximum send speed' };
+      case 'jitter': return { label: 'Analyzing connection stability...', context: 'Consistency of your connection' };
+      case 'packetLoss': return { label: 'Checking data integrity...', context: 'Whether data arrives intact' };
+      case 'bufferbloat': return { label: 'Testing latency under load...', context: 'How your connection handles traffic spikes' };
+      case 'complete': return { label: 'Analysis complete', context: '' };
+      default: return { label: '', context: '' };
     }
   })();
 
@@ -112,29 +112,38 @@ export function ScanScreen() {
             <AnimatePresence mode="wait">
               {isRunning && (
                 <motion.div
-                  key={phaseLabel}
-                  className="flex items-center gap-2"
+                  key={phaseInfo.label}
+                  className="flex flex-col items-center"
                   style={{
-                    padding: '5px 14px',
-                    borderRadius: 'var(--radius-xs)',
+                    padding: '8px 20px',
+                    borderRadius: 'var(--radius-sm)',
                     background: 'var(--bg-panel)',
                     border: '1px solid var(--border)',
                     backdropFilter: 'blur(8px)',
                     marginBottom: 16,
+                    textAlign: 'center',
                   }}
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                 >
-                  <div
-                    style={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      background: 'var(--accent-orange)',
-                    }}
-                  />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-orange)' }}>
-                    {phaseLabel}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <div
+                      style={{
+                        width: 6, height: 6, borderRadius: '50%',
+                        background: 'var(--accent-orange)',
+                        animation: 'pulse 1.5s ease-in-out infinite',
+                      }}
+                    />
+                    <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent-orange)' }}>
+                      {phaseInfo.label}
+                    </span>
+                  </div>
+                  {phaseInfo.context && (
+                    <span style={{ fontSize: 10, fontWeight: 400, color: 'var(--text-tertiary)', marginTop: 3 }}>
+                      {phaseInfo.context}
+                    </span>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -203,7 +212,7 @@ export function ScanScreen() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  Test your Internet Quality now!
+                  Start Analysis
                 </motion.button>
               ) : isRunning ? (
                 <motion.button
