@@ -9,11 +9,11 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt'],
+      includeAssets: ['favicon.jpg', 'robots.txt'],
       manifest: {
-        name: 'Speedfox - Internet Diagnostics',
-        short_name: 'Speedfox',
-        description: 'Comprehensive internet speed & quality diagnostics',
+        name: 'SpeedFox - Internet Diagnostic -- by MetaSites Studio',
+        short_name: 'SpeedFox',
+        description: 'Free deep analysis — speed, stability, latency, streaming quality. By MetaSites Studio.',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',

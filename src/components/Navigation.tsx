@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { Gauge, Clock, Settings as SettingsIcon, Wifi, Globe } from 'lucide-react';
+import { Gauge, Clock, Settings as SettingsIcon, Wifi, Globe, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../store/useStore';
 import { getConnectionType, detectISP } from '../engine/utils';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 import type { TabId } from '../types';
 
 const tabs: { id: TabId; icon: typeof Gauge; labelKey: string }[] = [
@@ -17,6 +18,7 @@ export function Navigation() {
   const setActiveTab = useStore((s) => s.setActiveTab);
   const connectionType = useStore((s) => s.connectionType);
   const ispName = useStore((s) => s.ispName);
+  const { canInstall, install } = useInstallPrompt();
 
   useEffect(() => {
     const ct = getConnectionType();
@@ -118,6 +120,28 @@ export function Navigation() {
                 <Globe size={12} style={{ color: 'var(--accent-purple)', flexShrink: 0 }} />
                 <span className="truncate">{ispName}</span>
               </div>
+            )}
+
+            {/* Install button — desktop */}
+            {canInstall && (
+              <button
+                onClick={install}
+                className="flex items-center gap-1.5 cursor-pointer"
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: 'white',
+                  background: 'linear-gradient(135deg, var(--accent), var(--accent-purple))',
+                  padding: '6px 14px',
+                  borderRadius: 'var(--radius-xs)',
+                  border: 'none',
+                  fontFamily: 'var(--font-sans)',
+                  boxShadow: '0 2px 8px rgba(6, 182, 212, 0.25)',
+                }}
+              >
+                <Download size={12} />
+                Install App
+              </button>
             )}
           </div>
         </div>
