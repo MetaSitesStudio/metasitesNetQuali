@@ -1,0 +1,16 @@
+{
+  "widgets": [
+    {
+      "id": "adgenerator-2026",
+      "active": true,
+      "title": "Profi-Ads in Sekunden generieren",
+      "subtitle": "MetaSites AdGenerator — KI-gestützte Visuals & Texte. Kein Abo, Pay-per-Use. Volle CI-Kontrolle.",
+      "imageUrl": "/banner/adgenerator_banner.jpg",
+      "ctaText": "Jetzt ausprobieren →",
+      "ctaUrl": "https://adgenerator.online",
+      "theme": "gradient-blue",
+      "campaignName": "speedfox-results",
+      "backgroundStyle": "linear-gradient(135deg, #0c1220 0%, #111827 50%, #0c1220 100%)"
+    }
+  ]
+}

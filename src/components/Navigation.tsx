@@ -27,19 +27,26 @@ export function Navigation() {
   return (
     <>
       {/* ====== DESKTOP NAV ====== */}
-      <header className="desktop-nav nav-surface fixed top-0 left-0 right-0 z-50" style={{ height: 56 }}>
+      <header
+        className="desktop-nav nav-surface fixed top-0 left-0 right-0 z-50"
+        style={{ height: 64 }}
+      >
         <div
           className="flex items-center h-full mx-auto"
-          style={{ maxWidth: 1320, paddingLeft: 40, paddingRight: 40 }}
+          style={{ maxWidth: 1400, paddingLeft: 32, paddingRight: 32, gap: 24 }}
         >
-          {/* Brand */}
-          <div className="flex items-center gap-2.5 mr-10 flex-shrink-0">
-            <img src="/logo_speedfox.png" alt="Speedfox" style={{ height: 32 }} />
+          {/* LEFT: Brand logo — own container, no clipping */}
+          <div className="flex items-center flex-shrink-0" style={{ minWidth: 140 }}>
+            <img
+              src="/logo_speedfox.png"
+              alt="Speedfox"
+              style={{ height: 36, display: 'block' }}
+            />
           </div>
 
-          {/* Tab nav — segmented pill style */}
+          {/* CENTER: Tab nav — segmented pill */}
           <nav
-            className="flex items-center relative"
+            className="flex items-center"
             style={{
               background: 'var(--bg-inset)',
               borderRadius: 'var(--radius-sm)',
@@ -55,7 +62,7 @@ export function Navigation() {
                   onClick={() => setActiveTab(id)}
                   className="relative flex items-center gap-2 cursor-pointer border-none"
                   style={{
-                    padding: '7px 18px',
+                    padding: '8px 18px',
                     borderRadius: 'var(--radius-xs)',
                     background: isActive ? 'var(--bg-panel)' : 'transparent',
                     color: isActive ? 'var(--text-primary)' : 'var(--text-tertiary)',
@@ -74,11 +81,11 @@ export function Navigation() {
             })}
           </nav>
 
-          {/* Spacer */}
+          {/* SPACER */}
           <div className="flex-1" />
 
-          {/* Connection badge */}
-          <div className="flex items-center gap-3">
+          {/* RIGHT: Connection badges */}
+          <div className="flex items-center gap-8">
             {connectionType !== 'unknown' && connectionType !== 'Unknown' && (
               <div
                 className="flex items-center gap-1.5"
@@ -87,7 +94,7 @@ export function Navigation() {
                   fontWeight: 500,
                   color: 'var(--text-secondary)',
                   background: 'var(--bg-inset)',
-                  padding: '5px 12px',
+                  padding: '6px 12px',
                   borderRadius: 'var(--radius-xs)',
                 }}
               >

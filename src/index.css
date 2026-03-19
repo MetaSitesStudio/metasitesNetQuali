@@ -318,3 +318,59 @@ body {
   background: radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
   bottom: -100px; right: -80px;
 }
+
+/* ===== DASHBOARD HERO GRID ===== */
+.dashboard-hero-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-hero-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 340px;
+    align-items: start;
+    gap: 32px;
+  }
+  .dashboard-hero-grid > .mascot-container {
+    display: flex;
+    position: relative;
+  }
+}
+
+@media (max-width: 1023px) {
+  .dashboard-hero-grid > .mascot-container {
+    display: none;
+  }
+}
+
+/* Mascot → Gauge visual connection */
+.mascot-container::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ===== RESULTS HERO GRID ===== */
+.results-hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .results-hero-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+}

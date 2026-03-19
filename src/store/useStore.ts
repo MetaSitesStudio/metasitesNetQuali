@@ -1,11 +1,15 @@
 import { create } from 'zustand';
-import type { TestResult, TestPhase, ThemeMode, TabId } from '../types';
+import type { TestResult, TestPhase, ThemeMode, TabId, ScreenFlow } from '../types';
 import { getAllResults, saveResult, clearAllResults } from './db';
 
 interface AppState {
   // Navigation
   activeTab: TabId;
   setActiveTab: (tab: TabId) => void;
+
+  // Screen flow
+  screenFlow: ScreenFlow;
+  setScreenFlow: (s: ScreenFlow) => void;
 
   // Test state
   phase: TestPhase;
@@ -55,6 +59,10 @@ export const useStore = create<AppState>((set, get) => ({
   // Navigation
   activeTab: 'dashboard',
   setActiveTab: (tab) => set({ activeTab: tab }),
+
+  // Screen flow
+  screenFlow: 'splash',
+  setScreenFlow: (screenFlow) => set({ screenFlow }),
 
   // Test state
   phase: 'idle',

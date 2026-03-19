@@ -1,0 +1,8 @@
+{
+  "slides": [
+    { "id": "ad-1", "imageUrl": "/ads/ad-1.png", "linkUrl": "https://adgenerator.online", "alt": "MetaSites AdGenerator" },
+    { "id": "ad-3", "imageUrl": "/ads/ad-3.png", "linkUrl": "https://adgenerator.online", "alt": "MetaSites AdGenerator" },
+    { "id": "ad-platepilot", "imageUrl": "/ads/ad-platepilot.png", "linkUrl": "https://platepilotpro.com", "alt": "PlatePilot Pro - Smart Nutrition Assistant" },
+    { "id": "ad-cinemacore", "imageUrl": "/ads/ad-cinemacore.png", "linkUrl": "https://cinemacore.app", "alt": "CinemaCore - Your Media. Your Rules." }
+  ]
+}

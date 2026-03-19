@@ -23,7 +23,7 @@ export function SpeedGauge({ speed, label, isActive = false }: SpeedGaugeProps) 
   const startAngle = 135;
 
   return (
-    <div className="gauge-container" style={{ width: '100%', maxWidth: 320 }}>
+    <div className="gauge-container" style={{ width: '100%', maxWidth: 320, margin: '0 auto' }}>
       <svg
         viewBox={`0 0 ${svgSize} ${svgSize}`}
         className={isActive ? 'gauge-glow' : ''}

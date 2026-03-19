@@ -18,3 +18,4 @@ export interface TestResult {
 export type TestPhase = 'idle' | 'ping' | 'dns' | 'download' | 'upload' | 'jitter' | 'packetLoss' | 'bufferbloat' | 'complete';
 export type ThemeMode = 'system' | 'dark' | 'light';
 export type TabId = 'dashboard' | 'history' | 'settings';
+export type ScreenFlow = 'splash' | 'scan' | 'results';

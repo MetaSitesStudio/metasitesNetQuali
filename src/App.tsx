@@ -35,16 +35,20 @@ export default function App() {
   useThemeEffect();
 
   const activeTab = useStore((s) => s.activeTab);
+  const screenFlow = useStore((s) => s.screenFlow);
   const loadHistory = useStore((s) => s.loadHistory);
 
   useEffect(() => { loadHistory(); resumeAutoTestIfNeeded(); }, [loadHistory]);
 
+  // Hide nav during splash
+  const showNav = !(activeTab === 'dashboard' && screenFlow === 'splash');
+
   return (
     <>
-      <Navigation />
-      {/* App content — offset for desktop nav (56px) */}
+      {showNav && <Navigation />}
+      {/* App content — offset for desktop nav (64px) */}
       <main className="flex-1 flex flex-col" style={{ paddingTop: 0 }}>
-        <div className="hidden lg:block" style={{ height: 56 }} />
+        {showNav && <div className="hidden lg:block" style={{ height: 64 }} />}
         <AnimatePresence mode="wait">
           {activeTab === 'dashboard' && (
             <motion.div
