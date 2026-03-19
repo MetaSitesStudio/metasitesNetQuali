@@ -109,42 +109,37 @@ export function getConnectionType(): string {
 }
 
 /**
- * Detect ISP by calling IP information APIs.
- * Tries multiple free APIs in order for reliability.
+ * Detect ISP via Netlify Function proxy (HTTPS-safe, no Mixed Content).
+ * Falls back to direct HTTPS APIs if the function is unavailable (local dev).
  */
 export async function detectISP(): Promise<{ isp: string; ip: string }> {
-  // Try ip-api.com first (no key needed, good ISP data, 45 req/min)
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 3000);
+
+  // Primary: Netlify Function proxy (production)
   try {
-    const res = await fetch('http://ip-api.com/json/?fields=query,isp,org', {
+    const res = await fetch('/.netlify/functions/ipLookup', {
+      signal: controller.signal,
       cache: 'no-store',
     });
     if (res.ok) {
       const data = await res.json();
-      if (data.isp && data.isp !== '') {
-        return { isp: data.isp, ip: data.query || '' };
+      clearTimeout(timer);
+      if (data.isp && data.isp !== 'Unknown') {
+        return { isp: data.isp, ip: data.ip || '' };
       }
     }
-  } catch { /* continue to next */ }
-  
-  // Fallback: ipapi.co (free tier, 1000/day)
+  } catch { /* continue to fallback */ }
+
+  clearTimeout(timer);
+
+  // Fallback: direct HTTPS call (local dev without Netlify CLI)
   try {
     const res = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       return {
         isp: data.org || data.asn || 'Unknown',
-        ip: data.ip || '',
-      };
-    }
-  } catch { /* continue to next */ }
-
-  // Second fallback: ipinfo.io
-  try {
-    const res = await fetch('https://ipinfo.io/json', { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      return {
-        isp: data.org ? data.org.replace(/^AS\d+\s*/, '') : 'Unknown',
         ip: data.ip || '',
       };
     }
