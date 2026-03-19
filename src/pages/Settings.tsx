@@ -244,45 +244,59 @@ export function Settings() {
           </div>
         </div>
 
-        {/* Install App */}
-        {(canInstall || isInstalled) && (
-          <div className="panel" style={{ padding: '20px 22px' }}>
-            <div className="section-label">
-              <Smartphone size={13} />
-              Install App
-            </div>
-            {isInstalled ? (
-              <div className="flex items-center gap-2">
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-green)' }} />
-                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent-green)' }}>App installed</span>
-              </div>
-            ) : (
-              <>
-                <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 10, marginTop: -4 }}>
-                  Install Speedfox as a native app for quick access and offline support.
-                </p>
-                <button
-                  onClick={install}
-                  className="flex items-center gap-2 cursor-pointer"
-                  style={{
-                    padding: '8px 18px',
-                    borderRadius: 'var(--radius-sm)',
-                    background: 'linear-gradient(135deg, var(--accent), var(--accent-purple))',
-                    border: 'none',
-                    color: 'white',
-                    fontSize: 13,
-                    fontWeight: 600,
-                    fontFamily: 'var(--font-sans)',
-                    boxShadow: '0 2px 12px rgba(6, 182, 212, 0.25)',
-                  }}
-                >
-                  <Smartphone size={15} />
-                  Install Speedfox
-                </button>
-              </>
-            )}
+        {/* Install App — always visible */}
+        <div className="panel" style={{ padding: '20px 22px' }}>
+          <div className="section-label">
+            <Smartphone size={13} />
+            Install App
           </div>
-        )}
+          {isInstalled ? (
+            <div className="flex items-center gap-2">
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-green)' }} />
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent-green)' }}>App installed</span>
+            </div>
+          ) : canInstall ? (
+            <>
+              <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 10, marginTop: -4 }}>
+                Install SpeedFox as a native app for quick access and offline support.
+              </p>
+              <button
+                onClick={install}
+                className="flex items-center gap-2 cursor-pointer"
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'linear-gradient(135deg, var(--accent), var(--accent-purple))',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  fontFamily: 'var(--font-sans)',
+                  boxShadow: '0 2px 12px rgba(6, 182, 212, 0.25)',
+                }}
+              >
+                <Smartphone size={15} />
+                Install SpeedFox
+              </button>
+            </>
+          ) : (
+            <>
+              <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 12, marginTop: -4 }}>
+                Install SpeedFox as a native app for quick access and offline support.
+              </p>
+              <div className="flex flex-col gap-2">
+                <div style={{ padding: '8px 12px', borderRadius: 'var(--radius-xs)', background: 'var(--bg-inset)', fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>Chrome / Edge:</strong>{' '}
+                  Click the install icon <span style={{ opacity: 0.7 }}>⊕</span> in the address bar, or go to <span style={{ opacity: 0.7 }}>⋮ → Install SpeedFox</span>
+                </div>
+                <div style={{ padding: '8px 12px', borderRadius: 'var(--radius-xs)', background: 'var(--bg-inset)', fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>Safari / iOS:</strong>{' '}
+                  Tap <span style={{ opacity: 0.7 }}>Share → Add to Home Screen</span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Network Alerts */}
         <div className="panel lg:col-span-2" style={{ padding: '20px 22px' }}>
