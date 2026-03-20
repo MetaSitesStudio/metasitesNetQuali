@@ -134,7 +134,7 @@ export function SpeedFoxMascot({ state, className }: SpeedFoxMascotProps) {
 
       {/* Mascot image */}
       <motion.img
-        src="/SpeedFox_hero.png"
+        src="/SpeedFox_hero.webp"
         alt="Speedfox Mascot"
         variants={mascotVariants}
         animate={state}

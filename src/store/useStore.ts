@@ -117,16 +117,31 @@ export const useStore = create<AppState>((set, get) => ({
   // History
   history: [],
   loadHistory: async () => {
-    const results = await getAllResults();
-    set({ history: results });
+    try {
+      const results = await getAllResults();
+      set({ history: results });
+    } catch (err) {
+      console.error('[SpeedFox] Failed to load history:', err);
+    }
   },
   addToHistory: async (result) => {
-    await saveResult(result);
-    const history = get().history;
-    set({ history: [result, ...history] });
+    try {
+      await saveResult(result);
+      const history = get().history;
+      set({ history: [result, ...history] });
+    } catch (err) {
+      console.error('[SpeedFox] Failed to save result:', err);
+      // Still add to in-memory state so it shows during this session
+      const history = get().history;
+      set({ history: [result, ...history] });
+    }
   },
   clearHistory: async () => {
-    await clearAllResults();
+    try {
+      await clearAllResults();
+    } catch (err) {
+      console.error('[SpeedFox] Failed to clear history:', err);
+    }
     set({ history: [] });
   },
 

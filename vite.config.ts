@@ -11,7 +11,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.jpg', 'robots.txt'],
       manifest: {
-        name: 'SpeedFox - Internet Diagnostic -- by MetaSites Studio',
+        name: 'SpeedFox.app - by MetaSites Studio\'s - Global Internet Diagnostics',
         short_name: 'SpeedFox',
         description: 'Free deep analysis — speed, stability, latency, streaming quality. By MetaSites Studio.',
         theme_color: '#0f172a',

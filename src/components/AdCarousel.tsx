@@ -2,14 +2,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface AdSlide {
+export interface AdSlide {
   id: string;
   imageUrl: string;
   linkUrl: string;
   alt: string;
 }
 
-const FALLBACK_SLIDES: AdSlide[] = [
+export const FALLBACK_SLIDES: AdSlide[] = [
   { id: 'ad-1', imageUrl: '/ads/ad-1.png', linkUrl: 'https://adgenerator.online?ref=speedfox', alt: 'MetaSites AdGenerator' },
   { id: 'ad-2', imageUrl: '/ads/ad-2.png', linkUrl: 'https://metasites.io?ref=speedfox', alt: 'MetaSites Studio' },
   { id: 'ad-3', imageUrl: '/ads/ad-3.png', linkUrl: 'https://speedfox.app/pro?ref=speedfox', alt: 'SpeedFox Pro' },

@@ -1,0 +1,13 @@
+# SpeedFox.app — robots.txt
+# https://speedfox.app
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://speedfox.app/sitemap.xml
+
+# Block crawling of test endpoints and internal assets
+Disallow: /ads/
+Disallow: /sw.js
+Disallow: /workbox-*.js

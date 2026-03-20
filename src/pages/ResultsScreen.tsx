@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import {
   ArrowDown,
   ArrowUp,
@@ -32,6 +33,7 @@ import {
 } from '../engine/qualityScore';
 import { shareResult } from '../engine/exportShare';
 import { getMaxVideoQuality, getEstimatedLoadTime, getBufferingEstimate } from '../engine/videoQuality';
+import { MobileAdPopup } from '../components/MobileAdPopup';
 
 /** Generate a 1-line mascot reaction based on grade */
 function getMascotReaction(grade: string): string {
@@ -60,6 +62,11 @@ export function ResultsScreen() {
   const latestResult = useStore((s) => s.latestResult);
   const ispSpeed = useStore((s) => s.ispSpeed);
   const setScreenFlow = useStore((s) => s.setScreenFlow);
+
+  // Redirect to scan if no result available (prevents black screen)
+  useEffect(() => {
+    if (!latestResult) setScreenFlow('scan');
+  }, [latestResult, setScreenFlow]);
 
   if (!latestResult) return null;
 
@@ -462,6 +469,8 @@ export function ResultsScreen() {
         {/* Bottom banner — UNCHANGED */}
         <PromoWidgetSlot />
       </motion.div>
+      {/* Mobile Ad Popup — single random ad, shown once per session, mobile only */}
+      <MobileAdPopup />
     </div>
   );
 }

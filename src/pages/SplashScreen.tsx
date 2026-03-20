@@ -16,7 +16,8 @@ export function SplashScreen() {
         justifyContent: 'center',
         background: 'var(--bg-base)',
         zIndex: 100,
-        overflow: 'hidden',
+        overflow: 'auto',
+        padding: '24px 24px env(safe-area-inset-bottom, 24px)',
       }}
     >
       {/* Ambient glow behind mascot */}
@@ -32,6 +33,9 @@ export function SplashScreen() {
         animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
+
+      {/* Spacer to push content toward center */}
+      <div style={{ flex: '1 1 0' }} />
 
       {/* Mascot */}
       <motion.div
@@ -108,17 +112,20 @@ export function SplashScreen() {
         </motion.button>
       </motion.div>
 
-      {/* Attribution */}
+      {/* Spacer to push attribution to bottom */}
+      <div style={{ flex: '1 1 0' }} />
+
+      {/* Attribution — in flow, always visible */}
       <motion.span
         style={{
-          position: 'absolute',
-          bottom: 32,
           fontSize: 11,
           fontWeight: 500,
           color: 'var(--text-tertiary)',
           letterSpacing: '0.06em',
           textTransform: 'uppercase',
           opacity: 0.6,
+          paddingBottom: 8,
+          flexShrink: 0,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
