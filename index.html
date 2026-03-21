@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
     <!-- Primary Meta -->
-    <title>SpeedFox.app - by MetaSites Studio's - Global Internet Diagnostics</title>
+    <title>Internet Speed Test & Network Performance Analysis | SpeedFox</title>
     <meta name="description" content="Free comprehensive internet speed test — measure download, upload, ping, jitter, packet loss, bufferbloat, DNS speed and streaming quality. Deep diagnostics by MetaSites Studio." />
     <meta name="keywords" content="speed test, internet speed, download speed, upload speed, ping test, jitter, packet loss, bufferbloat, DNS speed, internet diagnostics, network quality, streaming quality, MetaSites Studio, SpeedFox" />
     <meta name="author" content="MetaSites Studio" />
@@ -80,9 +80,189 @@
       "screenshot": "https://speedfox.app/og-image.png"
     }
     </script>
+
+    <!-- FAQPage Structured Data for AI snippet extraction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does SpeedFox measure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SpeedFox measures download speed, upload speed, ping latency, jitter, packet loss, bufferbloat, DNS resolution speed, and video streaming quality — all in a single 30-second test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is SpeedFox free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, SpeedFox is completely free. No signup or registration required. Just open speedfox.app and click Analyze My Connection."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is SpeedFox different from other speed tests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditional speed tests only measure raw download and upload throughput. SpeedFox goes deeper by analyzing connection stability, bufferbloat under load, packet loss, jitter variance, DNS performance, and real-world video streaming quality — giving you a complete picture of your internet health."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is bufferbloat and why does it matter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bufferbloat occurs when your router buffers too much data, causing latency spikes during heavy usage. Even with fast download speeds, high bufferbloat means video calls freeze, gaming lags, and streaming buffers. SpeedFox measures this so you can identify the real cause of poor internet quality."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does SpeedFox work on mobile devices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, SpeedFox is a progressive web app that works on any device with a modern browser — desktop, tablet, or smartphone. No app download required."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- SEO/AEO: Semantic content layer for crawlers and AI systems -->
+    <!-- Visually hidden via sr-only but fully accessible to crawlers -->
+    <div aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">
+
+      <h1>Internet Speed Test & Network Performance Analysis — SpeedFox</h1>
+      <p>Test your real internet quality beyond just speed. SpeedFox is a free, comprehensive internet diagnostics tool by <a href="https://metasites.io">MetaSites Studio</a>.</p>
+
+      <nav aria-label="Page sections">
+        <a href="#what-is-speedfox">What is SpeedFox</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#what-is-measured">What Is Measured</a>
+        <a href="#why-different">Why SpeedFox Is Different</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <section id="what-is-speedfox">
+        <h2>What is SpeedFox?</h2>
+        <p>SpeedFox is a free, browser-based internet performance analyzer that goes far beyond traditional speed tests. Built by MetaSites Studio, it measures not just download and upload speeds, but also connection stability, latency under load, packet integrity, DNS performance, and real-world streaming quality — all in a single 30-second test with no signup required.</p>
+        <p>Unlike basic speed tests that only show raw throughput numbers, SpeedFox provides a holistic Network Quality Score that reflects how your internet connection actually performs in daily use — during video calls, gaming, streaming, and remote work.</p>
+      </section>
+
+      <section id="how-it-works">
+        <h2>How SpeedFox Works</h2>
+        <p>SpeedFox runs a multi-phase diagnostic test directly in your browser:</p>
+        <ol>
+          <li><strong>Speed Analysis</strong> — Measures download and upload throughput using multi-stream adaptive testing for accurate results even on fast connections.</li>
+          <li><strong>Latency Profiling</strong> — Tests ping response time, jitter variance, and latency stability under both idle and loaded conditions.</li>
+          <li><strong>Stability Assessment</strong> — Detects packet loss, measures bufferbloat (latency increase under load), and evaluates connection consistency.</li>
+          <li><strong>Streaming Quality Estimation</strong> — Determines the maximum video streaming resolution your connection can reliably sustain (480p, 720p, 1080p, 4K).</li>
+          <li><strong>DNS Performance</strong> — Measures DNS resolution speed, which directly impacts how fast websites begin loading.</li>
+        </ol>
+        <p>The entire test takes approximately 30 seconds and produces a comprehensive quality score along with detailed metric breakdowns.</p>
+      </section>
+
+      <section id="what-is-measured">
+        <h2>What SpeedFox Measures</h2>
+
+        <h3>Download Speed</h3>
+        <p>How fast data travels from the internet to your device, measured in Mbps. Essential for streaming, downloading files, and browsing.</p>
+
+        <h3>Upload Speed</h3>
+        <p>How fast data travels from your device to the internet, measured in Mbps. Critical for video calls, cloud backups, and sharing content.</p>
+
+        <h3>Ping / Latency</h3>
+        <p>The round-trip time for data packets, measured in milliseconds. Low latency is crucial for gaming, video conferencing, and real-time applications.</p>
+
+        <h3>Jitter</h3>
+        <p>The variation in latency over time. High jitter causes choppy audio/video and inconsistent gaming performance, even when average ping is low.</p>
+
+        <h3>Packet Loss</h3>
+        <p>The percentage of data packets that fail to reach their destination. Even 1% packet loss can significantly degrade VoIP calls and online gaming.</p>
+
+        <h3>Bufferbloat</h3>
+        <p>The increase in latency when your connection is under heavy load. High bufferbloat means your internet feels slow during peak usage — video calls freeze while someone else streams Netflix.</p>
+
+        <h3>DNS Resolution Speed</h3>
+        <p>How quickly your DNS server translates domain names into IP addresses. Slow DNS adds delay to every website you visit and every app you open.</p>
+
+        <h3>Video Streaming Quality</h3>
+        <p>SpeedFox estimates the maximum video resolution your connection can reliably sustain, from 480p SD to 4K Ultra HD, based on actual throughput and stability.</p>
+      </section>
+
+      <section id="why-different">
+        <h2>Why SpeedFox Is Different from Traditional Speed Tests</h2>
+        <p>Most internet speed tests only measure two things: download speed and upload speed. While these numbers look impressive on a results page, they tell you almost nothing about your actual internet experience.</p>
+        <p>Here is what makes SpeedFox different:</p>
+        <ul>
+          <li><strong>Real-world metrics</strong> — SpeedFox measures what actually matters: can you hold a video call without freezing? Will your game lag during prime time? Can you stream 4K while your family uses the internet?</li>
+          <li><strong>Bufferbloat detection</strong> — The number one hidden cause of poor internet quality, ignored by virtually all other speed tests.</li>
+          <li><strong>Composite quality score</strong> — Instead of just numbers, you get an actionable overall score that tells you if your connection is good, acceptable, or needs attention.</li>
+          <li><strong>No installation needed</strong> — Works instantly in any modern browser as a progressive web app.</li>
+          <li><strong>Privacy-first</strong> — No account required, no personal data collected, no tracking.</li>
+        </ul>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <details>
+          <summary>What does SpeedFox measure?</summary>
+          <p>SpeedFox measures download speed, upload speed, ping latency, jitter, packet loss, bufferbloat, DNS resolution speed, and video streaming quality — all in a single 30-second test.</p>
+        </details>
+
+        <details>
+          <summary>Is SpeedFox free to use?</summary>
+          <p>Yes, SpeedFox is completely free. No signup or registration required. Just open speedfox.app and click Analyze My Connection.</p>
+        </details>
+
+        <details>
+          <summary>How is SpeedFox different from other speed tests?</summary>
+          <p>Traditional speed tests only measure raw download and upload throughput. SpeedFox goes deeper by analyzing connection stability, bufferbloat under load, packet loss, jitter variance, DNS performance, and real-world video streaming quality — giving you a complete picture of your internet health.</p>
+        </details>
+
+        <details>
+          <summary>What is bufferbloat and why does it matter?</summary>
+          <p>Bufferbloat occurs when your router buffers too much data, causing latency spikes during heavy usage. Even with fast download speeds, high bufferbloat means video calls freeze, gaming lags, and streaming buffers. SpeedFox measures this so you can identify the real cause of poor internet quality.</p>
+        </details>
+
+        <details>
+          <summary>Does SpeedFox work on mobile devices?</summary>
+          <p>Yes, SpeedFox is a progressive web app that works on any device with a modern browser — desktop, tablet, or smartphone. No app download required.</p>
+        </details>
+      </section>
+
+      <footer>
+        <p>SpeedFox is developed by <a href="https://metasites.io">MetaSites Studio</a>. Free internet performance diagnostics for everyone.</p>
+      </footer>
+
+    </div>
+
+    <!-- noscript: Fallback for crawlers/users without JavaScript -->
+    <noscript>
+      <div style="max-width:800px;margin:40px auto;padding:20px;font-family:Inter,sans-serif;color:#e2e8f0;background:#0f172a">
+        <h1>SpeedFox — Internet Speed Test & Network Performance Analysis</h1>
+        <p>SpeedFox is a free, comprehensive internet diagnostics tool that measures download speed, upload speed, ping, jitter, packet loss, bufferbloat, DNS speed, and streaming quality.</p>
+        <p><strong>JavaScript is required to run the speed test.</strong> Please enable JavaScript in your browser to use SpeedFox.</p>
+        <h2>What SpeedFox Measures</h2>
+        <ul>
+          <li>Download and upload speed (Mbps)</li>
+          <li>Ping latency and jitter (ms)</li>
+          <li>Packet loss percentage</li>
+          <li>Bufferbloat under load</li>
+          <li>DNS resolution speed</li>
+          <li>Video streaming quality estimation</li>
+        </ul>
+        <p>Visit <a href="https://speedfox.app" style="color:#3b82f6">speedfox.app</a> with JavaScript enabled to test your internet connection.</p>
+        <p>Built by <a href="https://metasites.io" style="color:#3b82f6">MetaSites Studio</a></p>
+      </div>
+    </noscript>
   </body>
 </html>
